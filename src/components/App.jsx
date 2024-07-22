@@ -21,9 +21,16 @@ const App = () => {
       try {
         setIsLoading(true);
         const response = await fetch(
-          `https://pixabay.com/api/?q=${query}&page=${page}&key=41258332-bc5b81f30b9173b6d7f6fa8ea&image_type=photo&orientation=horizontal&per_page=12`
+          `https://pixabay.com/api/?q=${query}&page=${page}&key=${process.env.REACT_APP_PIXABAY_API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
         );
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
         const data = await response.json();
+        console.log('Fetched data:', data);
+
         setImages(prevImages => [...prevImages, ...data.hits]);
       } catch (error) {
         console.error('Error fetching images:', error);
